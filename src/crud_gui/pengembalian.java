@@ -4,17 +4,37 @@
  */
 package crud_gui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import java.util.Date;
+
 /**
  *
  * @author wiman
  */
 public class pengembalian extends javax.swing.JFrame {
+    Connection conn= null;
+    Statement st = null;
 
     /**
      * Creates new form 
      */
     public pengembalian() {
         initComponents();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn=DriverManager.getConnection("jdbc:mysql://localhost/db_perpustakaan","root","");
+            st=conn.createStatement();
+        }
+        catch(Exception e){
+            throw new RuntimeException("uncaught", e);
+        }
+        
     }
 
     /**
@@ -33,8 +53,8 @@ public class pengembalian extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txt_judul = new javax.swing.JTextField();
         txt_denda = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btn_simpan = new javax.swing.JButton();
+        btn_cek = new javax.swing.JButton();
         tanggal_kembali = new com.toedter.calendar.JDateChooser();
         jLabel5 = new javax.swing.JLabel();
         pinjam = new javax.swing.JTextField();
@@ -59,9 +79,19 @@ public class pengembalian extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Judul");
 
-        jButton1.setText("Simpan");
+        btn_simpan.setText("Simpan");
+        btn_simpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_simpanActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Cek Kode");
+        btn_cek.setText("Cek Kode");
+        btn_cek.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cekActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
@@ -101,11 +131,11 @@ public class pengembalian extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(tanggal_kembali, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
                             .addComponent(txt_denda))))
-                .addComponent(jButton2)
+                .addComponent(btn_cek)
                 .addGap(20, 20, 20))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(123, 123, 123)
-                .addComponent(jButton1)
+                .addComponent(btn_simpan)
                 .addGap(71, 71, 71)
                 .addComponent(btn_kembali)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -116,7 +146,7 @@ public class pengembalian extends javax.swing.JFrame {
                 .addContainerGap(37, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jButton2)
+                    .addComponent(btn_cek)
                     .addComponent(pinjam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -132,7 +162,7 @@ public class pengembalian extends javax.swing.JFrame {
                     .addComponent(txt_denda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(50, 50, 50)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(btn_simpan)
                     .addComponent(btn_kembali))
                 .addGap(16, 16, 16))
         );
@@ -181,7 +211,62 @@ public class pengembalian extends javax.swing.JFrame {
 
     private void btn_kembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_kembaliActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
+        new menu().setVisible(true);
     }//GEN-LAST:event_btn_kembaliActionPerformed
+
+    private void btn_cekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cekActionPerformed
+        // TODO add your handling code here:
+        try {
+            st = conn.createStatement();
+            String sql = ("Select * from peminjaman INNER JOIN list_buku ON peminjaman.kode_buku = list_buku.kode_buku " + 
+                    "WHERE peminjaman.id_pinjam ="+pinjam.getText()+" AND username='"+login.txt_username.getText()+"'");
+            ResultSet rs = st.executeQuery(sql);
+            if (rs.next()) {
+                txt_judul.setText(rs.getString("judul"));
+            }
+            else {
+                JOptionPane.showMessageDialog(this,"Data Tidak di temukan atau ID salah","Informasi", JOptionPane.ERROR_MESSAGE);
+                pinjam.setText("");
+                txt_judul.setText("");
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("koneksi gagal " + e.toString());
+        }
+    }//GEN-LAST:event_btn_cekActionPerformed
+    private void hapuslayar(){
+        pinjam.setText("");
+        txt_judul.setText("");
+        txt_denda.setText("");
+        tanggal_kembali.setDateFormatString("");
+    }
+    private void btn_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_simpanActionPerformed
+        // TODO add your handling code here:
+        try {
+            java.util.Date utilDate = tanggal_kembali.getDate();
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+            
+            PreparedStatement pStatment = conn.prepareStatement("INSERT INTO pengembalian"
+                    +"(tanggal_kembali,denda,id_pinjam,username)"+
+                    "VALUES (?,?,?,?)");
+            pStatment.setDate(1, sqlDate);
+            pStatment.setString(2, txt_denda.getText());
+            pStatment.setInt(3, Integer.valueOf(pinjam.getText()));
+            pStatment.setString(4,login.txt_username.getText());
+            if (pStatment.executeUpdate()>0) {
+                JOptionPane.showMessageDialog(this,"Penambahan Sukses","Informasi", JOptionPane.INFORMATION_MESSAGE);
+                hapuslayar();
+            }
+            else {
+                JOptionPane.showConfirmDialog(this,"Penambahan gagal", "Information", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        catch(SQLException e) {
+            e.printStackTrace();
+        }
+        
+    }//GEN-LAST:event_btn_simpanActionPerformed
 
     /**
      * @param args the command line arguments
@@ -219,9 +304,9 @@ public class pengembalian extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_cek;
     private javax.swing.JButton btn_kembali;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btn_simpan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

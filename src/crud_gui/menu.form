@@ -29,6 +29,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Pengembalian Buku"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pengembalian_bukuActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="edit_data">
               <Properties>
@@ -42,11 +45,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Delete Data Peminjaman"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="delete_dataActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menu_exit">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Keluar Program"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menu_exitActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

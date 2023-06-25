@@ -3,13 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package crud_gui;
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -17,16 +14,17 @@ import java.util.Date;
 
 /**
  *
- * @author wiman
+ * @author Lab Mekatronika
  */
-public class peminjaman extends javax.swing.JFrame {
+public class edit extends javax.swing.JFrame {
     Connection conn= null;
     Statement st = null;
 
+
     /**
-     * Creates new form
+     * Creates new form edit
      */
-    public peminjaman() {
+    public edit() {
         initComponents();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -47,7 +45,6 @@ public class peminjaman extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -65,9 +62,9 @@ public class peminjaman extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(255, 102, 0));
+        jPanel1.setBackground(new java.awt.Color(255, 102, 102));
 
-        jPanel2.setBackground(new java.awt.Color(0, 204, 204));
+        jPanel2.setBackground(new java.awt.Color(255, 204, 102));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
@@ -173,28 +170,27 @@ public class peminjaman extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Form Peminjaman Buku");
+        jLabel1.setText("Edit Peminjaman Buku");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(146, 146, 146)
-                        .addComponent(jLabel1)))
+                .addGap(16, 16, 16)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(19, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(141, 141, 141))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
         );
@@ -220,19 +216,18 @@ public class peminjaman extends javax.swing.JFrame {
             java.util.Date utilDate2 = tanggal_pengembalian.getDate();
             java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
             java.sql.Date sqlDate2 = new java.sql.Date(utilDate2.getTime());
-            PreparedStatement pStatment = conn.prepareStatement("INSERT INTO peminjaman "
-                    + "(kode_buku,username,tanggal_peminjaman,tanggal_pengembalian)" 
-                    + "VALUES (?,?,?,?)");
+            PreparedStatement pStatment = conn.prepareStatement("UPDATE peminjaman "
+                    + "SET kode_buku=?,tanggal_peminjaman=?,tanggal_pengembalian=? WHERE username=?");
             pStatment.setString(1,txt_buku.getText());
-            pStatment.setString(2,login.txt_username.getText());
-            pStatment.setDate(3,sqlDate);
-            pStatment.setDate(4,sqlDate2);
+            pStatment.setDate(2,sqlDate);
+            pStatment.setDate(3,sqlDate2);
+            pStatment.setString(4,login.txt_username.getText());
             if (pStatment.executeUpdate()>0) {
-                JOptionPane.showMessageDialog(this,"Penambahan Sukses","Informasi", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this,"Perubahan data Sukses","Informasi", JOptionPane.INFORMATION_MESSAGE);
                 hapuslayar();
             }
             else {
-                JOptionPane.showConfirmDialog(this,"Penambahan gagal", "Information", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showConfirmDialog(this,"Perubahan data gagal", "Information", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         catch (SQLException e) {
@@ -261,18 +256,18 @@ public class peminjaman extends javax.swing.JFrame {
             System.out.println("koneksi gagal " + e.toString());
         }
     }//GEN-LAST:event_btn_cekActionPerformed
-
-    private void btn_kembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_kembaliActionPerformed
-        // TODO add your handling code here:
-        this.setVisible(false);
-        new menu().setVisible(true);
-    }//GEN-LAST:event_btn_kembaliActionPerformed
-    private void hapuslayar(){
+        private void hapuslayar(){
         txt_buku.setText("");
         txt_judul.setText("");
         tanggal_pinjam.setDateFormatString("");
         tanggal_pengembalian.setDateFormatString("");
     }
+    private void btn_kembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_kembaliActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        new menu().setVisible(true);
+    }//GEN-LAST:event_btn_kembaliActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -290,20 +285,20 @@ public class peminjaman extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(peminjaman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(edit.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(peminjaman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(edit.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(peminjaman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(edit.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(peminjaman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(edit.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new peminjaman().setVisible(true);
+                new edit().setVisible(true);
             }
         });
     }
@@ -312,7 +307,6 @@ public class peminjaman extends javax.swing.JFrame {
     private javax.swing.JButton btn_cek;
     private javax.swing.JButton btn_kembali;
     private javax.swing.JButton btn_simpan;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

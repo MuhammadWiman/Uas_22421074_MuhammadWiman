@@ -112,6 +112,11 @@ public class menu extends javax.swing.JFrame {
         menu.add(peminjaman_buku);
 
         pengembalian_buku.setText("Pengembalian Buku");
+        pengembalian_buku.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pengembalian_bukuActionPerformed(evt);
+            }
+        });
         menu.add(pengembalian_buku);
 
         edit_data.setText("Edit Data Peminjaman");
@@ -123,9 +128,19 @@ public class menu extends javax.swing.JFrame {
         menu.add(edit_data);
 
         delete_data.setText("Delete Data Peminjaman");
+        delete_data.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delete_dataActionPerformed(evt);
+            }
+        });
         menu.add(delete_data);
 
         menu_exit.setText("Keluar Program");
+        menu_exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_exitActionPerformed(evt);
+            }
+        });
         menu.add(menu_exit);
 
         jMenuBar1.add(menu);
@@ -158,6 +173,8 @@ public class menu extends javax.swing.JFrame {
 
     private void edit_dataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_dataActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
+        new edit().setVisible(true);
     }//GEN-LAST:event_edit_dataActionPerformed
 
     private void peminjaman_bukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_peminjaman_bukuActionPerformed
@@ -165,6 +182,23 @@ public class menu extends javax.swing.JFrame {
         this.setVisible(false);
         new peminjaman().setVisible(true);
     }//GEN-LAST:event_peminjaman_bukuActionPerformed
+
+    private void pengembalian_bukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pengembalian_bukuActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        new pengembalian().setVisible(true);
+    }//GEN-LAST:event_pengembalian_bukuActionPerformed
+
+    private void delete_dataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_dataActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        new delete().setVisible(true);
+    }//GEN-LAST:event_delete_dataActionPerformed
+
+    private void menu_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_exitActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_menu_exitActionPerformed
 
     /**
      * @param args the command line arguments
