@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 25, 2023 at 10:29 AM
--- Server version: 10.4.25-MariaDB
--- PHP Version: 8.1.10
+-- Generation Time: Jun 27, 2023 at 07:52 AM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -42,7 +42,8 @@ CREATE TABLE `list_buku` (
 
 INSERT INTO `list_buku` (`kode_buku`, `judul`, `penerbit`, `kategori`, `pengarang`, `tahun_terbit`) VALUES
 ('A001', 'Malin Kundang', 'CV. Pustaka Setia, 2004.', 'Cerita Rakyat', 'Rini Kurniasih', '2006-12-04'),
-('B001', 'Filsafat', 'PT.sejahtera', 'ilmu pengetahuan', 'wiman', '2021-06-11');
+('B001', 'Filsafat', 'PT.pencari Cinta', 'Ilmu', 'wiman', '2023-06-13'),
+('C001', 'Dilan', 'CV.sejahtera', 'Novel', 'Asep', '2023-06-10');
 
 -- --------------------------------------------------------
 
@@ -63,7 +64,7 @@ CREATE TABLE `peminjaman` (
 --
 
 INSERT INTO `peminjaman` (`id_pinjam`, `kode_buku`, `username`, `tanggal_peminjaman`, `tanggal_pengembalian`) VALUES
-(3, 'A001', 'wiman123', '2023-06-03', '2024-06-29');
+(1, 'C001', 'wiman123', '2023-06-01', '2023-09-30');
 
 -- --------------------------------------------------------
 
@@ -78,13 +79,6 @@ CREATE TABLE `pengembalian` (
   `id_pinjam` int(3) NOT NULL,
   `username` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `pengembalian`
---
-
-INSERT INTO `pengembalian` (`id`, `tanggal_kembali`, `denda`, `id_pinjam`, `username`) VALUES
-(2, '2023-06-30', '1000', 3, 'wiman123');
 
 -- --------------------------------------------------------
 
@@ -151,13 +145,13 @@ ALTER TABLE `registrasi`
 -- AUTO_INCREMENT for table `peminjaman`
 --
 ALTER TABLE `peminjaman`
-  MODIFY `id_pinjam` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_pinjam` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `pengembalian`
 --
 ALTER TABLE `pengembalian`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `registrasi`
@@ -173,7 +167,8 @@ ALTER TABLE `registrasi`
 -- Constraints for table `peminjaman`
 --
 ALTER TABLE `peminjaman`
-  ADD CONSTRAINT `peminjaman_ibfk_1` FOREIGN KEY (`username`) REFERENCES `registrasi` (`username`);
+  ADD CONSTRAINT `peminjaman_ibfk_1` FOREIGN KEY (`username`) REFERENCES `registrasi` (`username`),
+  ADD CONSTRAINT `peminjaman_ibfk_2` FOREIGN KEY (`kode_buku`) REFERENCES `list_buku` (`kode_buku`);
 
 --
 -- Constraints for table `pengembalian`
